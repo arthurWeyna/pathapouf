@@ -4,7 +4,7 @@ This is a R script that finds out the most probable number of haplomes per subpo
 
 ## Principle
 
-The general idea of the analysis is to evaluate the likelihood of all possible combinations of haplome numbers up to a maximum number per subpopulation, $m_{max}$. For instance, if $m_{max}=2$ and $G=2$ supopulations are present, five likelihoods will be computed: $p(m_{1} = 1, m_{1} = 1 \vert DATA}$
+The general idea of the analysis is to evaluate the likelihood of all possible combinations of haplome numbers up to a maximum number per subpopulation, $m_{max}$. For instance, if $m_{max}=2$ and $G=2$ supopulations are present, five likelihoods will be computed: $p(m_{1} = 1, m_{1} = 1 \vert DATA)$, 
 
 ## Setup
 ## Input
