@@ -50,6 +50,10 @@ PatHapOuf should work on any up-to-date **R** install, but relies on three packa
 
 # Input
 
-Read counts and alleles frequencies for each site should be bundled into a single input file (see example input file).
+Read counts for one sequenced genetic pool and alleles frequencies for each site should be bundled into a single input file (see example file). This file should have a header, one line per site and two whitespace-seperated columns. The first column should give read counts for each allele, separated by commas. The second should give allele frequencies for each alleles, separated by commas, and for each subpopulation, separated by semicolons. The first column of the header can be anything, but the second column of the header gives names to subpopulations that will be used in the output, seperated by semicolons. Importantly, allele order should be consistent across columns and subpopulations. 
 
 # Output
+
+PatHapOuf outputs four files. The user is asked to supply a prefix which will be used to name these files:
+
+* {prefix}
