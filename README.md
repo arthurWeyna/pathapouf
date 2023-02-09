@@ -10,7 +10,7 @@ The analysis is meant to be applied to per-allele read counts (i.e. allele cover
 
 ##Data
 
-$m_{max}$. For any datased X where G subpopulations are present, that is all $p(X \vert m)$, with $m = \\\{m_{1}, m_{2}, ..., m_{G}\\\}$ and $m_{g} \in [0,m_{max}]$. Then, one can find out the most probable haplome number combination directly, or look at the most probable haplome number for any subpopulation $g$ independently by comparing all $p(X \vert m_{g})$. Any $p(X \vert m_{g} = n)$ is obtained as $\sum{p(X \vert m, m_{g} = n)}$.
+plop$m_{max}$. For any datased X where G subpopulations are present, that is all $p(X \vert m)$, with $m = \\\{m_{1}, m_{2}, ..., m_{G}\\\}$ and $m_{g} \in [0,m_{max}]$. Then, one can find out the most probable haplome number combination directly, or look at the most probable haplome number for any subpopulation $g$ independently by comparing all $p(X \vert m_{g})$. Any $p(X \vert m_{g} = n)$ is obtained as $\sum{p(X \vert m, m_{g} = n)}$.
 
 The model assumed to generate the observed read counts dataset is the following. First, a true number of haplomes are sampled from the various subpopulation to constitute the genetic pool. At this point, no particular haplome number combination is preferred (i.e., uniform prior on $m$) 
 
