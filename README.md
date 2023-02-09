@@ -9,7 +9,7 @@ The analysis is meant to be applied to per-allele read counts (i.e. alleles cove
 ## Underlying model
 Assume that by sequencing a given genetic pool, per-allele read counts were obtained for $L$ sites and arranged into a set $X$, where each element $X_{i}$ gives per-allele read counts at site $i$. Letting $A_{i}$ be the number of possible alleles at site $i$, that is: 
 
-$$X_{i} = \\\{c_{i1}, c_{i2}, ..., c_{iA_{i}}\\\}, \textrm{ with total coverage } C_{i} = \sum_{k=1}^{A_{i}} c_{ik}$$
+$$ X_{i} = \\\{c_{i1}, c_{i2}, ..., c_{iA_{i}}\\\}, \textrm{ with total coverage } C_{i} = \sum_{k=1}^{A_{i}} c_{ik}$$
 
 Also assume that there exist $G$ subpopulations whose members are susceptible to be represented in the sequenced genetic pool. If allele frequencies at each site and in each subpopulation are known *a priori*, they can be arranged in a set $F$ where each element $F_{i}$ is a $G$ x $A_{i}$ matrix, whose $j^{th}$ row gives allele frequencies in subpopulation $j$ at site $i$.
 
@@ -21,7 +21,9 @@ At first, it is simplest to assume that $X_{i}$ follows a multinomial distributi
 
 $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
-where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. The vector $S_{i}$ can be written as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome that carry allele $k$ within the sequenced genetic pool at site $i$. Because $A_{i}$ has a finite number $A_{i}^{T}$ of possible values 
+where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. The vector $S_{i}$ can be written as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome that carry allele $k$ within the sequenced genetic pool at site $i$. Because $A_{i}$ has a finite number $A_{i}^{T} = (M_{tot}+1)^{A_{i}}$ of possible values, we can write:
+
+$$ p(X_{i} \vert M) = \sum_{l=1}^{A_{i}^{T}}(p(X_{i} \vert A_{i})p(A_{i} \vert M)) $$ 
 
 ## Error parameter
 # Setup
