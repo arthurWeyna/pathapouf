@@ -21,7 +21,7 @@ At first, it is simplest to assume that $X_{i}$ follows a multinomial distributi
 
 $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
-where $S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool. Letting $M_{tot} = \sum_{j=1}^{G}$
+where $S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool. The vector $S_{i}$ can be expressed as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{1}, a_{2}, ..., a_{A_{i}}\\\}$ 
 
 ## Error parameter
 # Setup
