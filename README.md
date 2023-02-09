@@ -25,6 +25,9 @@ where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realize
 
 $$ p(X_{i} \vert M) = \sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{i})p(A_{i} \vert M)] $$ 
 
+which is useful because $p(A_{i} \vert M)$ can be computed using the fact that A_{i} follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$.
+$$ A_{i} \sim PMD(P) \textrm{ with } P=IF_{i}$ 
+
 ## Error parameter
 # Setup
 # Input
