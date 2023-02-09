@@ -64,7 +64,7 @@ PatHapOuf outputs four files. The user is asked to supply a prefix which will be
 
 # Run
 
-PatHapOuf.R asks for four parameters.
+PatHapOuf.R asks for four parameters (in this order):
 1. the path to the input file
 2. m_{max}
 3. $e$
