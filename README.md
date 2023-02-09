@@ -33,9 +33,9 @@ where $I$ is a $M_{tot}$ x $G$ indicator matrix whose element $[n,j]$ is $1$ if 
 
 ## Error parameter
 
-Sadly, the likelihood computation as presented above is very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate for error, the script assumes that instead of a binomial distribution with parameters $C_{i}$ and $S{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S{i}$ and a fixed user-defined error parameter $e$:
+Sadly, likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S{i}$ and on a fixed user-defined error parameter $e$ in the following way:
 
-$$ D_{i} = 
+$$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
 # Setp
 # Input
 
