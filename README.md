@@ -15,13 +15,13 @@ Also assume that there exist $G$ subpopulations whose members are susceptible to
 
 We want to compute the likelihood of $X$ for any given combination $M$ of haplome number per subpopulations. Letting $m_{max}$ be the maximum number of haplomes allowed per subpopulation, that is:
 
-$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1}, m_{2}, ..., m_{G}\\\}\textrm{; } m_{j} \in [0,m_{max}]\textrm{ and } M_{tot} = \sum_{j=1}^{G} m_{j} \in [1,G \times m_{max}] $$
+$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1}, m_{2}, ..., m_{G}\\\}\textrm{, } m_{j} \in [0,m_{max}]\textrm{ and } M_{tot} = \sum_{j=1}^{G} m_{j} \in [1,G \times m_{max}] $$
 
 At first, it is simplest to assume that $X_{i}$ follows a multinomial distribution:
 
 $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
-where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. The vector $S_{i}$ can be written as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k$^{th} element 
+where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. The vector $S_{i}$ can be written as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome within the sequenced genetic pool taht carry allele $k$.
 
 ## Error parameter
 # Setup
