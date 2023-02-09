@@ -6,7 +6,8 @@ The general idea behind this tool is to evaluate the likelihood of all possible 
 
 The analysis is meant to be applied to per-allele read counts (i.e. alleles coverage) at a number of polymorphic sites, as can typically be obtained from NGS reads alignments. Importantly, the analysis also needs independent pre-acquired estimates of allele frequencies in each subpopulation.
 
-##Underlying model
+## Underlying model
+
 Assume that by sequencing a given genetic pool, per-allele read counts were obtained for $L$ sites and arranged into a set $X$, where each element $X_{i}$ gives per-allele read counts at site $i$. Letting $A_{i}$ be the number of possible alleles at site $i$, that is: 
 
 $$ X_{i} = \\\{c_{i1}, c_{i2}, ..., c_{iA_{i}}\\\}, \textrm{ with total coverage } C_{i} = \sum_{k=1}^{A_{i}} c_{ik}$$
