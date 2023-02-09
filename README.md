@@ -9,7 +9,7 @@ The analysis is meant to be applied to per-allele read counts (i.e. alleles cove
 # Underlying model
 
 ## Data
-Assume that per-allele read counts were obtained for $L$ sites and arranged into a set $X$ of size $L$, with each element $X_{i}$ giving per-allele read counts at site $i$. With $A_{i}$ the number of possible alleles at site $i$, that is $X_{i} = \\\{c_{1}, c_{2}, ..., c_{A_{i}}\\\}
+Assume that per-allele read counts were obtained for $L$ sites and arranged into a set $X$ of size $L$, with each element $X_{i}$ giving per-allele read counts at site $i$. With $A_{i}$ the number of possible alleles at site $i$, that is $X_{i} = \\\{c_{1}, c_{2}, ..., c_{A_{i}}\\\}$.
 
 * dataset $X$ is a set with L elements $X_{i}$ 
 plop$m_{max}$. For any datased X where G subpopulations are present, that is all $p(X \vert m)$, with $m = \\\{m_{1}, m_{2}, ..., m_{G}\\\}$ and $m_{g} \in [0,m_{max}]$. Then, one can find out the most probable haplome number combination directly, or look at the most probable haplome number for any subpopulation $g$ independently by comparing all $p(X \vert m_{g})$. Any $p(X \vert m_{g} = n)$ is obtained as $\sum{p(X \vert m, m_{g} = n)}$.
