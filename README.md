@@ -2,7 +2,7 @@
 
 This is a R script that helps finding out the most probable number of haplomes per subpopulations present in a sequenced genetic pool. It was initially developped to analyze the content of ant queens spermathecae, that may contain a number of paternal haplomes of various origins. 
 
-The general idea behind this tool is to evaluate the likelihood of all possible combinations of haplome numbers up to a maximum number per subpopulation. Then, one can find out the most probable haplome number combination directly, or look at the most probable haplome number for any subpopulation independently, by summing likelihoods over combinations that support each possible number.
+The general idea behind this tool is to evaluate the likelihood of all possible combinations of haplome numbers up to a (user-defined) maximum number per subpopulation. Then, one can find out the most probable haplome number combination directly, or look at the most probable haplome number for any subpopulation independently, by summing likelihoods over combinations that support each possible number.
 
 The analysis is meant to be applied to per-allele read counts (i.e. alleles coverage) at a number of polymorphic sites, as can typically be obtained from NGS reads alignments. Importantly, the analysis also needs independent pre-acquired estimates of allele frequencies in each subpopulation.
 
@@ -21,7 +21,7 @@ At first, it is simplest to assume that $X_{i}$ follows a multinomial distributi
 
 $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
-where $S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool.
+where $S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool. Letting $M_{tot} = \sum_{j=1}^{G}$
 
 ## Error parameter
 # Setup
