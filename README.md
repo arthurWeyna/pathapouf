@@ -15,7 +15,7 @@ Also assume that there exist $G$ subpopulations whose members are susceptible to
 
 We want to compute the likelihood of $X$ for any given combination $M$ of haplome number per subpopulations. Letting $m_{max}$ be the maximum number of haplomes allowed per subpopulation, that is:
 
-$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1}, m_{2}, ..., m_{G}\\\}\textrm{; } m_{j} \in [0,m_{max}]\textrm{ and } M_{tot} = \sum_{j=1}^{G} \in [1,G \times m_{max}] $$
+$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1}, m_{2}, ..., m_{G}\\\}\textrm{; } m_{j} \in [0,m_{max}]\textrm{ and } M_{tot} = \sum_{j=1}^{G} m_{j} \in [1,G \times m_{max}] $$
 
 At first, it is simplest to assume that $X_{i}$ follows a multinomial distribution:
 
