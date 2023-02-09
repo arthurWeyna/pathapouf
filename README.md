@@ -23,7 +23,7 @@ $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
 where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. The vector $S_{i}$ can be written as $A_{i}/M_{tot}$ where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome that carry allele $k$ within the sequenced genetic pool at site $i$. Because $A_{i}$ has a finite number $A_{i}^{T} = (M_{tot}+1)^{A_{i}}$ of possible values, we can write:
 
-$$ p(X_{i} \vert M) = \sum_{l=1}^{A_{i}^{T}}(p(X_{i} \vert A_{i})p(A_{i} \vert M)) $$ 
+$$ p(X_{i} \vert M) = \sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{i})p(A_{i} \vert M)] $$ 
 
 ## Error parameter
 # Setup
