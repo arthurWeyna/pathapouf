@@ -45,7 +45,7 @@ Setting $e=0$ when calling the script will in fact use the smallest respresentab
 
 # Requirements
 
-PatHapOuf should work on any up-to-date \emph{R} install, but relies on three packages. \emph{matrixStats}, \emph{extraDistr} and \emph{PoissonMultinomial}. Install these before running!
+PatHapOuf should work on any up-to-date **R** install, but relies on three packages. \emph{matrixStats}, \emph{extraDistr} and \emph{PoissonMultinomial}. Install these before running!
 
 # Input
 
