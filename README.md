@@ -6,14 +6,16 @@ The general idea behind this tool is to evaluate the likelihood of all possible 
 
 The analysis is meant to be applied to per-allele read counts (i.e. alleles coverage) at a number of polymorphic sites, as can typically be obtained from NGS reads alignments. Importantly, the analysis also needs pre-acquired and independent estimates of allele frequencies in each subpopulation for each site.
 
-# Underlying model
-## Data
+## Underlying model
 Assume that by sequencing a given genetic pool, per-allele read counts were obtained for $L$ sites and arranged into a set $X$, where each element $X_{i}$ gives per-allele read counts at site $i$. Letting $A_{i}$ be the number of possible alleles at site $i$, that is: 
+
 $$X_{i} = \\\{c_{1}, c_{2}, ..., c_{A_{i}}\\\}, \textrm{ with total coverage } C_{i} = \sum_{k=1}^{A_{i}} c_{k}$$
 
 Also assume that there exist $G$ subpopulations whose members are susceptible to be represented in the sequenced genetic pool. If allele frequencies at each site and in each subpopulation are known *a priori*, they can be arranged in a set $F$ where each element $F_{i}$ is a $G$ x $A_{i}$ matrix, whose $j^{th}$ row gives allele frequencies in subpopulation $j$ at site $i$.
 
+We want to compute the likelihood of $X$ for any given combination $M$ of haplome number per subpopulations. Letting $m_{max}$ be the maximum number of haplomes allowed per subpopulation, that is:
 
+$$ p(X\vertM) \textrm{with} M =\\\{m_{1}, m_{2}, ..., m_{G}\\\} $$
 
 the total coverage at site i.$$
 
