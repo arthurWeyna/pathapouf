@@ -62,6 +62,19 @@ PatHapOuf outputs four files. The user is asked to supply a prefix which will be
 * {prefix}.LogLiksGrp.txt contains log-likelihoods for each possible $M_{g}$
 * {prefix}.RelLiksGrp.txt is the same as {prefix}.LogLiksGrp.txt but expressed as relative likelihoods, which are helpful to compare.
 
+# Run
+
+PatHapOuf.R asks for four parameters.
+1. the path to the input file
+2. m_{max}
+3. $e$
+4. a prefix to name output files.
+
+Example run:
+
+```
+Rscript PatHapOuf.R example/example_2_1.txt 5 0.01 test
+```
 
 
 
