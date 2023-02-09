@@ -9,7 +9,7 @@ The analysis is meant to be applied to per-allele read counts (i.e. alleles cove
 # Underlying model
 ## Data
 Assume that per-allele read counts were obtained for $L$ sites and arranged into a set $X$ of size $L$, with each element $X_{i}$ giving per-allele read counts at site $i$. With $A_{i}$ the number of possible alleles at site $i$, that is: 
-$$X_{i} = \\\{c_{1}, c_{2}, ..., c_{A_{i}}\\\}. Note the tota cover $C_{i} = \sum_{k=1} c_{k}$$
+$$X_{i} = \\\{c_{1}, c_{2}, ..., c_{A_{i}}\\\}. \textrm{Note the total cover} $C_{i} = \sum_{k=1}^{A} c_{k}$$
 
 the total coverage at site i.$$
 
