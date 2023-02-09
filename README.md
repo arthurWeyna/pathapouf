@@ -19,7 +19,9 @@ $$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1
 
 At first, it is simplest to assume that $X_{i}$ follows a multinomial distribution:
 
-$$ X_{i} \sim Multinomial(C_{i}, S_{i}) \text{ where } S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\} \textrm{is the vector of realized allele frequencies in the pool}$$
+$$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
+
+where $S_{i} = \\\{s_{1}, s_{2}, ..., s_{A_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool.
 
 ## Error parameter
 # Setup
