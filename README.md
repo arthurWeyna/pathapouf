@@ -33,9 +33,14 @@ where $I$ is a $M_{tot}$ x $G$ indicator matrix whose element $[n,j]$ is $1$ if 
 
 ## Error parameter
 
-Sadly, likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S{i}$ and on a fixed user-defined error parameter $e$ in the following way:
+Sadly, likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S_{i}$ and on a fixed user-defined error parameter $e$ in the following way:
 
 $$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
+ 
+With this setup, $e$ is to be set between 0 and 1. a small positive $e$ will make $D_{i}$ arbitrarily large and will make $D_{i}/sum(D_{i})$ approach $S{i}$. In other words, a small $e$ will let the user approach the simpler multinomial case with parameter $S_{i}$. Conversely, a larger $e$ will make all elements of $D{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
+
+Empirically, a good value of $e$ for real data seems to be 0.01, but this will ultimately depend on the error rate within one's specific dataset. Users should try different values as the relationship between $e$ and PatHapOuf's result can be quite insightful.
+
 # Setp
 # Input
 
