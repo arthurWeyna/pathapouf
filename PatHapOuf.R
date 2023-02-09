@@ -53,7 +53,7 @@ PatHapLogLik <- function(Xs, Mmax, freqs, e=0.01, gnames=NULL){
 	G <- nrow(freqs[[1]]) #get number of groups from freqs, should be constant across freqs
 	if(is.null(gnames)){gnames <- paste0("group", 1:G)}
 	cat("Computing log-likelihoods.\n")
-	LogLiks <- array(log(1/((Mmax+1)^G-1)), dim=rep(Mmax+1, G)) #uniform prior on number of haplomes per group between 0 and Mmax
+	LogLiks <- array(0, dim=rep(Mmax+1, G)) #uniform prior on number of haplomes per group between 0 and Mmax
 	LogLiks[1] <- -Inf #prob 0 for no haplomes
 	mis<-rep(0, G)
 	pb <- txtProgressBar(min = 2, max = length(LogLiks), style = 3, width = 50, char = "=")	
