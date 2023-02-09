@@ -6,7 +6,7 @@ The general idea behind this tool is to evaluate the likelihood of all possible 
 
 The analysis is meant to be applied to per-allele read counts (i.e. alleles coverage) at a number of polymorphic sites, as can typically be obtained from NGS reads alignments. Importantly, the analysis also needs independent pre-acquired estimates of allele frequencies in each subpopulation.
 
-## Underlying model
+##Underlying model
 Assume that by sequencing a given genetic pool, per-allele read counts were obtained for $L$ sites and arranged into a set $X$, where each element $X_{i}$ gives per-allele read counts at site $i$. Letting $A_{i}$ be the number of possible alleles at site $i$, that is: 
 
 $$ X_{i} = \\\{c_{i1}, c_{i2}, ..., c_{iA_{i}}\\\}, \textrm{ with total coverage } C_{i} = \sum_{k=1}^{A_{i}} c_{ik}$$
@@ -32,7 +32,11 @@ $$ A_{i} \sim PMD(P) \textrm{ with } P=IF_{i} $$
 where $I$ is a $M_{tot}$ x $G$ indicator matrix whose element $[n,j]$ is $1$ if the pool's $n^{th}$ haplome originates from subpopulation $j$, and $0$ otherwise.
 
 ## Error parameter
-# Setup
+
+Sadly, the likelihood computation as presented above is very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate for error, the script assumes that instead of a binomial distribution with parameters $C_{i}$ and $S{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S{i}$ and a fixed user-defined error parameter $e$:
+
+$$ D_{i} = 
+# Setp
 # Input
 
 Read counts and alleles frequencies for each site should be bundled into a single input file (see Input section and example input file).
