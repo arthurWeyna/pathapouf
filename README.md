@@ -22,19 +22,19 @@ At first, it is simplest to assume that $X_{i}$ follows a multinomial distributi
 
 $$ X_{i} \sim Multinomial(C_{i}, S_{i})$$
 
-where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. Assuming equal contribution of each haplome to the pool, the vector $S_{i}$ can be written as $A_{i}/M_{tot}$, where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome that carry allele $k$ within the sequenced genetic pool at site $i$. Because $A_{i}$ has a finite number $A_{i}^{T} = (M_{tot}+1)^{A_{i}}$ of possible values, we can write:
+where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realized allele frequencies in the sequenced genetic pool at site $i$. Assuming equal contribution of each haplome to the pool, the vector $S_{i}$ can be written as $A_{i}/M_{tot}$, where $A_{i} = \\\{a_{i1}, a_{i2}, ..., a_{iA_{i}}\\\}$ is a vector whose $k^{th}$ element gives the realized number of haplome that carry allele $k$ within the sequenced genetic pool at site $i$. Because $A_{i}$ has a finite number $A_{i}^{T} = (M_{tot}+1)^{A_{i}}$ of possible values, we can sum likelihoods over all these values:
 
-$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{i})p(A_{i} \vert M)] $$ 
+$$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il})p(A_{il} \vert M)] $$ 
 
-This is useful because $p(A_{i} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{i}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
+This is useful any $p(A_{il} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{il}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
 
-$$ A_{i} \sim PMD(P) \textrm{ with } P=IF_{i} $$
+$$ A_{il} \sim PMD(P) \textrm{ with } P=IF_{i} $$
 
 where $I$ is a $M_{tot}$ x $G$ indicator matrix whose element $[n,j]$ is $1$ if the pool's $n^{th}$ haplome originates from subpopulation $j$, and $0$ otherwise.
 
 ## Error parameter
 
-Sadly, likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S_{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$ where the contrentration parameter $D_{i}$ depends on both $S_{i}$ and on a fixed user-defined error parameter $e$ in the following way:
+Likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S_{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$, where the contrentration parameter $D_{i}$ depends on both $S_{i}$ and on an error parameter $e \in ]0,1]$ in the following way:
 
 $$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
  
