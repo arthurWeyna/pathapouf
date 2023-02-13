@@ -44,7 +44,9 @@ A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, Pat
 
 $$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}\sum_{r=1}^{R}[p(X_{i} \vert A_{il}, e_{r})p(A_{il} \vert M)p(e_{r})] \textrm{ and } p(e_{r}) = 1/R$$ 
 
-Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output.
+Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output. Values of $e$ to be evaluated are given by the user through 3 parameters (from, to and by) used internally by function seq().
+
+Posterior to all likelihood computations, PatHapouf also implements a simple side analysis designed to help users cycle back to their data. Once the best (*i.e* most likely) combination of haplomes per subpopulation $M_{best}$ is determined, PatHapouf runs a quick ML estimation of $e$ for each site, given $M_{best}$. These values can help users by letting them know which sites are (low $e$) or are not (high $e$) compatible with $M_{best}$. The latter in particular might be indicative of error at some point. 
 
 # Requirements
 
@@ -61,13 +63,16 @@ PatHapOuf outputs eight files. The user is asked to supply a prefix which will b
 
 * {prefix}.LogLiks.txt contains log-likelihoods for each possible combination of $M$ and $e$.
 * {prefix}.RelLiks.txt contains the same as above but expressed as relative likelihoods (for easier comparisons).
-* {prefix}.LogLiksGrp.txt contains log-likelihoods for each possible $M_{g}$
-* {prefix}.RelLiksGrp.txt is the same as {prefix}.LogLiksGrp.txt but expressed as relative likelihoods, which are helpful to compare.
+* {prefix}.LogLiksGrp.txt contains log-likelihoods for each possible $m_{j}$.
+* {prefix}.RelLiksGrp.txt contains the same as above but expressed as relative likelihoods (for easier comparisons).
+* {prefix}.LogLiksE.txt contains log-likelihoods for each possible $e$ value.
+* {prefix}.RelLiksE.txt contains the same as above but expressed as relative likelihoods (for easier comparisons).
+* {prefix}.RelLiksE.txt contains $e$ estimates for each site given $M_{best}$.
 * {prefix}.log contains a few info about the analysis.
 
 # Run
 
-PatHapOuf.R asks for four parameters (in this order):
+PatHapOuf.R asks for six parameters (in this order):
 1. the path to the input file
 2. m_{max}
 3. $e$
