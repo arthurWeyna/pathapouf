@@ -48,16 +48,16 @@ Just as for individual values of $m_{j}$, the independent likelihood for each po
 
 Posterior to all likelihood computations, PatHapouf also implements a simple side analysis designed to help users cycle back to their data. Once the best (*i.e* most likely) combination of haplomes per subpopulation $M_{best}$ is determined, PatHapouf runs a quick ML estimation of $e$ for each site, given $M_{best}$. These values can help users by letting them know which sites are more (low $e$) or less (high $e$) compatible with $M_{best}$. The latter in particular might be indicative of error at some point. 
 
-# Requirements
+## Requirements
 
 PatHapOuf should work on any up-to-date **R** install, but relies on three packages. **matrixStats**, **extraDistr** and **PoissonMultinomial**. Install these before running!
 
-# Input
+## Input
 
 Read counts for one sequenced genetic pool and alleles frequencies for each site should be bundled into a single input file (see example file). This file should have a header, one line per site and two whitespace-seperated columns. The first column should give read counts for each allele, separated by commas. The second should give allele frequencies for each alleles, separated by commas, and for each subpopulation, separated by semicolons. The first column of the header can be anything, but the second column of the header gives names to subpopulations that will be used in the output, seperated by semicolons. Importantly, allele order should be consistent across columns and subpopulations. 
 
 
-# Output
+## Output
 
 PatHapOuf outputs eight files. The user is asked to supply a prefix which will be used to name these files:
 

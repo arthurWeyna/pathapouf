@@ -8,7 +8,7 @@ AddToLog <- function(string){
     log <<- c(log, string)
 }
 
-PatHapLogLikSite <- function(X, M, freq, e=0.01){
+PatHapLogLikSite <- function(X, M, freq, e=0.01, probe=1){
 ## Computes and outputs Lp(Xi|M)
 ## X is a vector of allele counts per allele
 ## M is a vector of haplome counts per group
@@ -34,15 +34,15 @@ PatHapLogLikSite <- function(X, M, freq, e=0.01){
 			#Error as coumpound multinomial
 			#ASLogLiks[length(ASLogLiks)+1] <- logSumExp(c(log(1-e) + dmultinom(x=X, prob=fis, log=T), log(e) + dmultinom(x=X, prob=rep(1,Nall)/Nall, log=T))) + log(ASprob)
 			#Error as Dirichlet multinomial
-            if(e==0){e <- e+.Machine$double.xmin}
 			fis2 <- (fis/e)+(1-fis)^e
-			ASLogLiks[length(ASLogLiks)+1] <- ddirmnom(x=X, alpha=fis2, size=sum(X), log=T) + log(ASprob)
+			ASLogLiks[length(ASLogLiks)+1] <- ddirmnom(x=X, alpha=fis2, size=sum(X), log=T) + log(ASprob) + log(probe)
 		}
 	}
+	ASLogLiks[is.na(ASLogLiks) | is.nan(ASLogLiks)] <- -Inf
 	return(logSumExp(ASLogLiks))
 }
 
-PatHapLogLik <- function(Xs, Mmax, freqs, e=0.01, gnames=NULL){
+PatHapLogLik <- function(Xs, Mmax, freqs, seq_e=c(0.01), gnames=NULL){
 ## Compute Lp(X|M) for every possible M. (1)
 ## Sum logliks over each group to get all Lp(X|Mi). (2)
 ## Computes relative likelihoods on (2). (3)
@@ -52,44 +52,84 @@ PatHapLogLik <- function(Xs, Mmax, freqs, e=0.01, gnames=NULL){
 ## freqs is a list of GxA matrices of allele frequencies in each group
 	G <- nrow(freqs[[1]]) #get number of groups from freqs, should be constant across freqs
 	if(is.null(gnames)){gnames <- paste0("group", 1:G)}
-	cat("Computing log-likelihoods.\n")
-	LogLiks <- array(0, dim=rep(Mmax+1, G)) #uniform prior on number of haplomes per group between 0 and Mmax
-	LogLiks[1] <- -Inf #prob 0 for no haplomes
+	AddToLog(paste0("Computing log-likelihoods for ", ((Mmax+1)^G)*length(seq_e), " parameter combinations."))
+	LogLiks <- array(0, dim=c(rep(Mmax+1, G), length(seq_e))) 
 	mis<-rep(0, G)
-	pb <- txtProgressBar(min = 2, max = length(LogLiks), style = 3, width = 50, char = "=")	
-	for(i in 2:length(LogLiks)){
+	pb <- txtProgressBar(min = 2, max = length(LogLiks), style = 3, width = 50, char = "=")
+	for(i in 1:length(LogLiks)){
 	 	setTxtProgressBar(pb, i)	
 		##recover what is the haplome number combination for one Loglik
 		mis <- as.vector(arrayInd(i, dim(LogLiks))-1)
-		LogLiks[i] <- LogLiks[i] + sum(mapply(Xs, freqs, FUN=function(x,y) PatHapLogLikSite(X=x, M=mis, freq=y, e=e), SIMPLIFY=T))
+		if(all(mis[-length(mis)] == 0)){
+			LogLiks[i] <- -Inf #All mi == 0 is impossible
+		} else {
+			LogLiks[i] <- sum(mapply(Xs, freqs, FUN=function(x,y) PatHapLogLikSite(X=x, M=mis[-length(mis)], freq=y, e=seq_e[mis[length(mis)]+1], probe=1/length(seq_e)), SIMPLIFY=T))
+		}
 	}
 	cat("\n")
 	#arrange results into a df
 	LogLiksdf <- as.data.frame.table(LogLiks)	
-	LogLiksdf[,1:G] <- arrayInd(1:length(LogLiks), dim(LogLiks))-1
-	names(LogLiksdf) <- c(gnames, "LogLik")
-    if(all(is.infinite(unlist(LogLiksdf["LogLik"])))){
-        AddToLog("The likelihoods of all male number combinations are 0. Consider raising maximum haplome number or curating the data.")
-    }
-	#sum logliks within groups and compute relative liks
+	LogLiksdf[,1:(G+1)] <- arrayInd(1:length(LogLiks), dim(LogLiks))-1
+	names(LogLiksdf) <- c(gnames, "e", "LogLik")
+	LogLiksdf[,"e"] <- seq_e[LogLiksdf[,"e"]+1]
+	RelLiksdf <- LogLiksdf
+	RelLiksdf[,G+2] <- round(exp(RelLiksdf[,G+2]-max(RelLiksdf[,G+2])), 5)
+	names(RelLiksdf)[G+2] <- "RelLik"
+    	if(all(is.infinite(unlist(LogLiksdf["LogLik"])))){
+        	AddToLog("All likelihoods are 0. Consider raising maximum haplome number or error rate, or curating the data.")
+    	} else {
+		bestcomb=LogLiksdf[which.max(LogLiksdf[,G+2]),1:(G+1)]
+		AddToLog(paste0("Best parameter combination is ", paste0(names(bestcomb), " : ", bestcomb, collapse=", ")))
+	}
+	#sum logliks within groups, for each e, and compute relative liks
 	LogLiksGrp <- as.data.frame(t(sapply(1:G, function(x) apply(LogLiks, x, function(y) logSumExp(y)))))
-	RelLiksGrp <- as.data.frame(t(apply(LogLiksGrp, 1, function(x) round(exp(x)/max(exp(x)), 5))))
 	RelLiksGrp <- as.data.frame(t(apply(LogLiksGrp, 1, function(x) round(exp(x-max(x)), 5))))
+	LogLiksE <- as.data.frame(t(apply(LogLiks, G+1, function(y) logSumExp(y))))
+	RelLiksE <- round(exp(LogLiksE-max(LogLiksE)), 5)
 	LogLiksGrp <- cbind(gnames, LogLiksGrp)
 	RelLiksGrp <- cbind(gnames, RelLiksGrp)
-	names(LogLiksGrp) <- c("group", paste0("n_", 0:Mmax))
-	names(RelLiksGrp) <- c("group", paste0("n_", 0:Mmax))
+	names(LogLiksGrp) <- c("group", paste0("m_", 0:Mmax))
+	names(RelLiksGrp) <- c("group", paste0("m_", 0:Mmax))
+	names(LogLiksE) <- paste0("e_", seq_e)
+	names(RelLiksE) <- paste0("e_", seq_e)
+	#Print a few interesting facts about results
+	bests <- c()
 	for(g in 1:G){
         rl <- sort(unlist(RelLiksGrp[g,2:(Mmax+2)]))
-        if(!all(is.nan(rl))){
-            best <- names(rl)[Mmax+1]
-            second <- names(rl)[Mmax]
-		    AddToLog(paste0("Best number of haplomes for ", gnames[g], " is ", sub("_", "=", best), ". Second best ", sub("_", "=", second), " is ", rl[second], " times as probable."))
-        } else {
-		    AddToLog(paste0("No best number of haplomes were found for ", gnames[g], "..."))
-        }
+        	if(!all(is.nan(rl))){
+        		best <- names(rl)[Mmax+1]
+			bests <- c(bests, as.numeric(sub("m_", "", best)))
+        	    	second <- names(rl)[Mmax]
+		    	AddToLog(paste0("Best number of haplomes for ", gnames[g], ": ", sub("m_", "", best), ". Second best ", sub("m_", "", second), " is ", rl[second], " times as probable."))
+        	} else {
+			AddToLog(paste0("No best number of haplomes was found for ", gnames[g], "..."))
+        	}
 	} 
-	return(list(LogLiks=LogLiksdf, LogLiksGrp=LogLiksGrp, RelLiksGrp=RelLiksGrp))
+	rl <- sort(unlist(RelLiksE[1,1:length(seq_e)]))
+        if(!all(is.nan(rl))){
+		best <- names(rl)[length(seq_e)]
+		bests <- c(bests, as.numeric(sub("e_", "", best)))
+		second <- names(rl)[length(seq_e)-1]
+		AddToLog(paste0("Best value for e: ", sub("e_", "", best), ". Second best ", sub("e_", "", second), " is ", rl[second], " times as probable."))
+	} else {
+		AddToLog("No best value for e was found...")
+	}
+	return(list(LogLiks=LogLiksdf, RelLiks=RelLiksdf, LogLiksGrp=LogLiksGrp, RelLiksGrp=RelLiksGrp, LogLiksE=LogLiksE, RelLiksE=RelLiksE, best=bests))
+}
+
+PatHapOptimE <- function(dataset, M){
+#Estimate e for each site of a dataset given one M.
+        AddToLog(paste0("Running per-site e estimations with ", paste0(dataset$groups, ": ", M, collapse=", ")))
+        optims <- list()
+        pb <- txtProgressBar(min = 0, max = length(dataset$a), style = 3, width = 50, char = "=")
+        for(i in 1:length(dataset$a)){
+                setTxtProgressBar(pb, i)
+                optims[[i]] <- optim(par=c(e=0.1), fn=PatHapLogLikSite, X=dataset$a[[i]], M=M, freq=dataset$f[[i]], method="Brent", lower=0, upper=1, control=list(fnscale=-1))
+        }
+        cat("\n")
+        es <- t(sapply(optims, function(x) c(x$par, x$convergence)))
+        colnames(es) <- c("e", "convergence")
+        return(es=es)
 }
 
 PatHapSimul <- function(n=c(1,1,1), nallmax=4, nloc=1, covl=10){
@@ -128,26 +168,36 @@ PatHapRead <- function(file){
 		lf[[i]] <- do.call("rbind", lapply(strsplit(tab[i,2], ";")[[1]], function(x) as.numeric(strsplit(x, ",")[[1]])))
 		if(length(la[[i]]) != ncol(lf[[i]])){stop(paste0("Site ", i, " frequencies do not match number of alleles"))}
 	}
-	AddToLog(paste0("Found data for ", i, " sites, frequencies for ",length(groups), " groups."))
+	AddToLog(paste0("Data for ", i, " sites, frequencies for ",length(groups), " groups: ",paste0(groups, collapse=", "),"."))
 	return(list(groups=groups, a=la, f=lf))
 }
-
-PatHapWrite <- function(results, prefix){
-	write.table(results$LogLiks, file=paste0(prefix, ".LogLiks.txt"), sep=" ", quote=F, row.names=F)
-	write.table(results$LogLiksGrp, file=paste0(prefix, ".LogLiksGrp.txt"), sep=" ", quote=F, row.names=F)
-	write.table(results$RelLiksGrp, file=paste0(prefix, ".RelLiksGrp.txt"), sep=" ", quote=F, row.names=F)
-	write.table(log, file=paste0(prefix, ".log"), sep=" ", quote=F, row.names=F, col.names=F)
-}
-
 
 args = commandArgs(trailingOnly=TRUE)
 ##1: path to input
 ##2: max number of males per group
-##3: error rate
-##4: output prefix
+##3: min. error rate
+##4: max. error rate
+##5: error rate step
+##6: output prefix
 
+AddToLog(paste0("Parameter m_max: ", as.numeric(args[2])))
+AddToLog(paste0("Parameter e: from ", as.numeric(args[3]), " to ", as.numeric(args[4]), " by steps of ", as.numeric(args[5])))
 
+#Read input
 dataset <- PatHapRead(args[1])
-results <- PatHapLogLik(Xs=dataset$a, Mmax=as.numeric(args[2]), freqs=dataset$f, gnames=dataset$groups, e=as.numeric(args[3]))
-PatHapWrite(results, args[4])
+#Run main analysis
+results <- PatHapLogLik(Xs=dataset$a, Mmax=as.numeric(args[2]), freqs=dataset$f, gnames=dataset$groups, seq_e=seq(as.numeric(args[3]), as.numeric(args[4]), as.numeric(args[5])))
+#Run per-site e estimations
+es <- PatHapOptimE(dataset=dataset, M=results$best[-length(results$best)])
+
+prefix <- args[6]
+write.table(results$LogLiks, file=paste0(prefix, ".LogLiks.txt"), sep=" ", quote=F, row.names=F)
+write.table(results$RelLiks, file=paste0(prefix, ".RelLiks.txt"), sep=" ", quote=F, row.names=F)
+write.table(results$LogLiksGrp, file=paste0(prefix, ".LogLiksGrp.txt"), sep=" ", quote=F, row.names=F)
+write.table(results$RelLiksGrp, file=paste0(prefix, ".RelLiksGrp.txt"), sep=" ", quote=F, row.names=F)
+write.table(results$LogLiksE, file=paste0(prefix, ".LogLiksE.txt"), sep=" ", quote=F, row.names=F)
+write.table(results$RelLiksE, file=paste0(prefix, ".RelLiksE.txt"), sep=" ", quote=F, row.names=F)
+write.table(es, file=paste0(prefix, ".PerSiteE.txt"), sep=" ", quote=F, row.names=F)
+write.table(log, file=paste0(prefix, ".log"), sep=" ", quote=F, row.names=F, col.names=F)
+
 
