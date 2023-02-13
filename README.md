@@ -44,7 +44,7 @@ A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, Pat
 
 $$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}\sum_{r=1}^{R}[p(X_{i} \vert A_{il}, e_{r})p(A_{il} \vert M)p(e_{r})] \textrm{ and } p(e_{r}) = 1/R$$ 
 
-Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output. Values of $e$ to be evaluated are given by the user through 3 parameters (from, to and by) used internally by function seq().
+Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output. Values of $e$ to be evaluated are given by the user through 3 parameters (from, to and by), used internally by **R**'s seq() function to construct $E$.
 
 Posterior to all likelihood computations, PatHapouf also implements a simple side analysis designed to help users cycle back to their data. Once the best (*i.e* most likely) combination of haplomes per subpopulation $M_{best}$ is determined, PatHapouf runs a quick ML estimation of $e$ for each site, given $M_{best}$. These values can help users by letting them know which sites are (low $e$) or are not (high $e$) compatible with $M_{best}$. The latter in particular might be indicative of error at some point. 
 
@@ -73,15 +73,17 @@ PatHapOuf outputs eight files. The user is asked to supply a prefix which will b
 # Run
 
 PatHapOuf.R asks for six parameters (in this order):
-1. the path to the input file
+1. path to the input file
 2. m_{max}
-3. $e$
-4. a prefix to name output files.
+3. $e$: from
+4. $e$: to
+5. $e$: by
+6. a prefix to name output files.
 
 Example run:
 
 ```
-Rscript PatHapOuf.R example/example_2_1.txt 5 0.01 test
+Rscript PatHapOuf.R example/example_2_1.txt 5 0 0.2 0.01 test
 ```
 
 
