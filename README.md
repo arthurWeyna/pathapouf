@@ -43,6 +43,9 @@ With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(
 A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods for a finite, user-defined sequence of values of $e$, $E = \\\{s_{1}, s_{2}, ..., s_{R}\\\}$, using: 
 
 $$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}\sum_{r=1}^{R}[p(X_{i} \vert A_{il}, e_{r})p(A_{il} \vert M)p(e_{r})] \textrm{ and } p(e_{r}) = 1/R$$ 
+
+Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output.
+
 # Requirements
 
 PatHapOuf should work on any up-to-date **R** install, but relies on three packages. **matrixStats**, **extraDistr** and **PoissonMultinomial**. Install these before running!
@@ -54,12 +57,13 @@ Read counts for one sequenced genetic pool and alleles frequencies for each site
 
 # Output
 
-PatHapOuf outputs four files. The user is asked to supply a prefix which will be used to name these files:
+PatHapOuf outputs eight files. The user is asked to supply a prefix which will be used to name these files:
 
-* {prefix}.log contains a few info about the analysis.
-* {prefix}.LogLiks.txt contains log-likelihoods for each possible $M$
+* {prefix}.LogLiks.txt contains log-likelihoods for each possible combination of $M$ and $e$.
+* {prefix}.RelLiks.txt contains the same as above but expressed as relative likelihoods (for easier comparisons).
 * {prefix}.LogLiksGrp.txt contains log-likelihoods for each possible $M_{g}$
 * {prefix}.RelLiksGrp.txt is the same as {prefix}.LogLiksGrp.txt but expressed as relative likelihoods, which are helpful to compare.
+* {prefix}.log contains a few info about the analysis.
 
 # Run
 
