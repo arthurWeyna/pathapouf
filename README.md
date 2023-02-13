@@ -42,7 +42,7 @@ With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(
 
 A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods for a finite, user-defined sequence of values of $e$, $E = \\\{s_{1}, s_{2}, ..., s_{R}\\\}$, using: 
 
-$$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{r=1}^{R}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il})p(A_{il} \vert M)] $$ 
+$$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{r=1}^{R}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il}, e_{r})p(A_{il} \vert M)p(e_{r}] $$ 
 # Requirements
 
 PatHapOuf should work on any up-to-date **R** install, but relies on three packages. **matrixStats**, **extraDistr** and **PoissonMultinomial**. Install these before running!
