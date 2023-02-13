@@ -40,7 +40,9 @@ $$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
  
 With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(D_{i})$ approach $S_{i}$. In other words, a small $e$ will approach the simpler multinomial case with parameter $S_{i}$. Conversely, a larger $e$ will make all elements of $D{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
 
-A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods at a user-defined sequence of values of $e$.
+A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods for a finite, user-defined sequence of values of $e$, $E = \\\{s_{1}, s_{2}, ..., s_{R}\\\}$, using: 
+
+$$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{r=1}^{R}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il})p(A_{il} \vert M)] $$ 
 # Requirements
 
 PatHapOuf should work on any up-to-date **R** install, but relies on three packages. **matrixStats**, **extraDistr** and **PoissonMultinomial**. Install these before running!
