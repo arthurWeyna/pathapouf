@@ -26,7 +26,7 @@ where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realize
 
 $$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il})p(A_{il} \vert M)] $$ 
 
-This is useful any $p(A_{il} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{il}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
+This is useful as any $p(A_{il} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{il}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
 
 $$ A_{il} \sim PMD(P) \textrm{ with } P=IF_{i} $$
 
@@ -38,12 +38,9 @@ Likelihood computations as presented above are very sensitive to error because e
 
 $$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
  
-With this setup, $e$ is to be set between 0 and 1. A small positive $e$ will make $D_{i}$ arbitrarily large and will make $D_{i}/sum(D_{i})$ approach $S_{i}$. In other words, a small $e$ will let the user approach the simpler multinomial case with parameter $S_{i}$ (*i.e.* no error). Conversely, a larger $e$ will make all elements of $D{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
+With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(D_{i})$ approach $S_{i}$. In other words, a small $e$ will approach the simpler multinomial case with parameter $S_{i}$. Conversely, a larger $e$ will make all elements of $D{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
 
-Empirically, a good value of $e$ for real data seems to be 0.01, but this will ultimately depend on the error rate within one's specific dataset. Users should try different values as the relationship between $e$ and PatHapOuf's result can be quite insightful.
-
-Setting $e=0$ when calling the script will in fact use the smallest respresentable value to avoid division by 0.
-
+A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods at a user-defined sequence of values of $e$.
 # Requirements
 
 PatHapOuf should work on any up-to-date **R** install, but relies on three packages. **matrixStats**, **extraDistr** and **PoissonMultinomial**. Install these before running!
