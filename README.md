@@ -14,7 +14,7 @@ $$ X_{i} = \\\{c_{i1}, c_{i2}, ..., c_{iA_{i}}\\\}, \textrm{ with total coverage
 
 Also assume that there exist $G$ subpopulations whose members are susceptible to be represented in the sequenced genetic pool. If allele frequencies at each site and in each subpopulation are known *a priori*, they can be arranged in a set $F$ where each element $F_{i}$ is a $G$ x $A_{i}$ matrix, whose $j^{th}$ row gives allele frequencies in subpopulation $j$ at site $i$.
 
-We want to compute the likelihood of $X$ for any given combination $M$ of haplome number per subpopulations. Letting $m_{max}$ be the maximum number of haplomes allowed per subpopulation, that is:
+We want to compute the likelihood of $X$ of any given combination $M$ of haplome number per subpopulations. Letting $m_{max}$ be the (user-defined) maximum number of haplomes allowed per subpopulation, that is:
 
 $$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) \textrm{  with  } M =\\\{m_{1}, m_{2}, ..., m_{G}\\\}\textrm{, } m_{j} \in [0,m_{max}]\textrm{ and } M_{tot} = \sum_{j=1}^{G} m_{j} \in [1,G \times m_{max}] $$
 
@@ -26,7 +26,7 @@ where $S_{i} = \\\{s_{i1}, s_{i2}, ..., s_{iA_{i}}\\\}$ is the vector of realize
 
 $$ p(X \vert M) = \prod_{i=1}^{L} p(X_{i} \vert M) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}[p(X_{i} \vert A_{il})p(A_{il} \vert M)] $$ 
 
-This is useful as any $p(A_{il} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{il}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
+which is useful as any $p(A_{il} \vert M)$ can be computed. Assuming that individuals from every subpopulation have an equal probability to end up in the sequenced genetic pool, $A_{il}$ follows a Poisson-Multinomial distribution whose parameter matrix can be expressed in terms of $M$ and $F_{i}$:
 
 $$ A_{il} \sim PMD(P) \textrm{ with } P=IF_{i} $$
 
@@ -34,19 +34,19 @@ where $I$ is a $M_{tot}$ x $G$ indicator matrix whose element $[n,j]$ is $1$ if 
 
 ## Error parameter
 
-Likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To compensate, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S_{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$, where the contrentration parameter $D_{i}$ depends on both $S_{i}$ and on an error parameter $e \in ]0,1]$ in the following way:
+Likelihood computations as presented above are very sensitive to error because even small sequencing or bioinformatic errors can render a dataset impossible under any $M$. To take error into account, PatHapOuf assumes that instead of a binomial distribution with parameters $C_{i}$ and $S_{i}$, $X_{i}$ follows a Dirichlet-multinomial distribution with parameters $C_{i}$ and $D_{i}$, where the contrentration parameter $D_{i}$ depends on both $S_{i}$ and on an error parameter $e \in ]0,1]$ in the following way:
 
 $$ D_{i} = \frac{S_{i}}{e} + (1-S_{i})^e $$
  
-With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(D_{i})$ approach $S_{i}$. In other words, a small $e$ will approach the simpler multinomial case with parameter $S_{i}$. Conversely, a larger $e$ will make all elements of $D{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
+With this setup, a small $e$ will make $D_{i}$ arbitrarily large and $D_{i}/sum(D_{i})$ approach $S_{i}$. In other words, a small $e$ will approach the simpler multinomial case with parameter $S_{i}$. Conversely, a larger $e$ will make all elements of $D_{i}$ approach one, which corresponds to a binomial distribution with uniform parameters (*i.e.* no information). 
 
-A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods for a finite, user-defined sequence of values of $e$, $E = \\\{s_{1}, s_{2}, ..., s_{R}\\\}$, using: 
+A complete analysis would ideally estimate $M$ and $e$ jointly. To simplify, PatHapOuf instead evaluates likelihoods for a finite and user-defined sequence of values of $e$, $E = \\\{s_{1}, s_{2}, ..., s_{R}\\\}$, using: 
 
 $$ p(X \vert M, e) = \prod_{i=1}^{L} p(X_{i} \vert M, e) = \prod_{i=1}^{L}\sum_{l=1}^{A_{i}^{T}}\sum_{r=1}^{R}[p(X_{i} \vert A_{il}, e_{r})p(A_{il} \vert M)p(e_{r})] \textrm{ and } p(e_{r}) = 1/R$$ 
 
 Just as for individual values of $m_{j}$, the independent likelihood for each possible value of $e$ is computed as sums of likelihoods and given in the output. Values of $e$ to be evaluated are given by the user through 3 parameters (from, to and by), used internally by **R**'s seq() function to construct $E$.
 
-Posterior to all likelihood computations, PatHapouf also implements a simple side analysis designed to help users cycle back to their data. Once the best (*i.e* most likely) combination of haplomes per subpopulation $M_{best}$ is determined, PatHapouf runs a quick ML estimation of $e$ for each site, given $M_{best}$. These values can help users by letting them know which sites are (low $e$) or are not (high $e$) compatible with $M_{best}$. The latter in particular might be indicative of error at some point. 
+Posterior to all likelihood computations, PatHapouf also implements a simple side analysis designed to help users cycle back to their data. Once the best (*i.e* most likely) combination of haplomes per subpopulation $M_{best}$ is determined, PatHapouf runs a quick ML estimation of $e$ for each site, given $M_{best}$. These values can help users by letting them know which sites are more (low $e$) or less (high $e$) compatible with $M_{best}$. The latter in particular might be indicative of error at some point. 
 
 # Requirements
 
@@ -74,7 +74,7 @@ PatHapOuf outputs eight files. The user is asked to supply a prefix which will b
 
 PatHapOuf.R asks for six parameters (in this order):
 1. path to the input file
-2. m_{max}
+2. $m_{max}$
 3. $e$: from
 4. $e$: to
 5. $e$: by
